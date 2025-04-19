@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chef Ganesa｜ガパオライス計算アプリ</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 1rem;
+      max-width: 700px;
+      margin: auto;
+    }
+    input {
+      padding: 0.5rem;
+      font-size: 1rem;
+      width: 100%;
+      margin-bottom: 1rem;
+    }
+    h1, h2 {
+      font-size: 1.3rem;
+      margin-top: 2rem;
+    }
+    ul {
+      padding-left: 1.2rem;
+    }
+    li {
+      margin-bottom: 0.4rem;
+    }
+    .section {
+      margin-top: 2rem;
+    }
+    pre {
+      white-space: pre-wrap;
+      background: #f7f7f7;
+      padding: 1rem;
+      border-left: 5px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+  <h1>🐘 Chef Ganesa｜ガパオライス計算アプリ（鶏もも肉バージョン）</h1>
+
+  <label for="servings">人数を入力（1〜30）：</label>
+  <input type="number" id="servings" value="1" min="1" max="30">
+
+  <div id="output"></div>
+
+  <div class="section">
+    <h2>📘 調理手順（参考用）</h2>
+    <pre id="instructions"></pre>
+  </div>
+
+  <script>
+    const calc = (amount, servings) => ({
+      unit: amount.toFixed(1),
+      total: (amount * servings).toFixed(1)
+    });
+
+    const ingredients = [
+      { name: "鶏もも肉", unit: "g", amount: 130 },
+      { name: "にんにく", unit: "g", amount: 4.3 },
+      { name: "プリッキーニュー", unit: "g", amount: 1.0 },
+      { name: "白こしょうホール", unit: "g", amount: 0.17 },
+      { name: "ホーリーバジル（炒め）", unit: "g", amount: 4.3 },
+      { name: "ホーリーバジル（仕上げ）", unit: "g", amount: 8.7 },
+      { name: "ラード", unit: "g", amount: 5.0 },
+      { name: "オールインワンソース（合計）", unit: "g", amount: 29.4 },
+      { name: "├ ナンプラー", unit: "g", amount: 10.5 },
+      { name: "├ シーユーダム", unit: "g", amount: 4.2 },
+      { name: "├ シーユーカオ", unit: "g", amount: 4.0 },
+      { name: "├ シーズニングソース", unit: "g", amount: 2.1 },
+      { name: "├ オイスターソース", unit: "g", amount: 8.6 },
+      { name: "炊き上がりジャスミンライス", unit: "g", amount: 96.7 },
+      { name: "目玉焼き", unit: "個", amount: 1 }
+    ];
+
+    const instructions = `
+【仕込み工程】
+● ごはん（炊飯）
+ジャスミンライス1,450gを軽くすすぐ（研がない）
+
+浄水1,650g＋バイトゥーイ約8gを加える
+
+30分浸水 → 通常炊飯 → 10分蒸らし → しゃもじで全体をほぐして保温
+
+● 肉・香味素材の下準備
+鶏もも肉1.80kg → 粗挽き加工
+
+にんにく＋プリッキーヌ（炒め用）をクロックヒンで潰す
+
+ホーリーバジル → 炒め用・仕上げ用に分けて冷蔵
+
+● ソース仕込み
+ナンプラー・シーユーダム・シーユーカオ・シーズニングソース・オイスターソースを合わせてオールインワンソース441gを準備し冷蔵
+`;
+
+    function updateOutput() {
+      const s = parseInt(document.getElementById('servings').value);
+      const list = ingredients.map(item => {
+        const calcVal = calc(item.amount, s);
+        return `<li>${item.name}：${item.amount}${item.unit} × ${s}人前 ＝ <strong>${calcVal.total}${item.unit}</strong></li>`;
+      }).join("\n");
+
+      document.getElementById('output').innerHTML = `
+        <h2>📦 材料（${s}人前分量）</h2>
+        <ul>${list}</ul>`;
+
+      document.getElementById('instructions').textContent = instructions;
+    }
+
+    document.getElementById('servings').addEventListener('input', updateOutput);
+    updateOutput();
+  </script>
+</body>
+</html>
